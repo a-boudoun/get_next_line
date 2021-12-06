@@ -6,69 +6,93 @@
 /*   By: aboudoun <aboudoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:43:22 by aboudoun          #+#    #+#             */
-/*   Updated: 2021/12/06 14:27:44 by aboudoun         ###   ########.fr       */
+/*   Updated: 2021/12/06 17:20:05 by aboudoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
+#include<stdio.h>
+#include<fcntl.h>
+#define BUFFER_SIZE 1
 #include "get_next_line.h"
 
-char *ft_line(char **s)
+char	*ft_line(char **s)
 {
-    char *line;
-    int i;
-    
-    i = 0;
-    while((*s)[i] != '\n' && (*s)[i] != '\0')
-        i++;
-    if ((*s)[i] == '\n')
-    {
-        line = ft_substr(*s, 0, i + 1);
-        *s = ft_strdup(*s + i + 1);
-    }
-    else
-    {
-        line = ft_strdup(*s);
-        *s = NULL;
-    }
-    return (line);
+	char	*line;
+	char	*to_free;
+	int		i;
+
+	to_free = *s;
+	i = 0;
+	while ((*s)[i] != '\n' && (*s)[i] != '\0')
+		i++;
+	if ((*s)[i] == '\n')
+	{
+		line = ft_substr(*s, 0, i + 1);
+		*s = ft_strdup(*s + i + 1);
+	}
+	else
+	{
+		line = ft_strdup(*s);
+		*s = NULL;
+	}
+	free (to_free);
+	return (line);
 }
 
-char *get_next_line(int fd)
+int	ft_str(int fd, char **s)
 {
-    static char *s = NULL;
-    char *line;
-    int byte_read;
-    char *bufer;
-	char *forfree;
+	char	*bufer;
+	char	*to_free;
+	int		byte_read;
 
-    if (fd < 0 || BUFFER_SIZE <= 0)
-        return NULL;
-	if (!s)
-		s = ft_strdup("");
-    
-    byte_read = 4;
-    while(!ft_strchr(s, '\n') && byte_read)
-    {
-		bufer = (char *) malloc(BUFFER_SIZE + 1);
-    	if(!bufer)
-        	return (NULL);
-		if ((byte_read = read(fd, bufer, BUFFER_SIZE)) < 0)
+	bufer = (char *) malloc(BUFFER_SIZE + 1);
+	if (!bufer)
+		return (-1);
+	byte_read = 4;
+	while (!ft_strchr(*s, '\n') && byte_read)
+	{
+		byte_read = read(fd, bufer, BUFFER_SIZE);
+		if (byte_read < 0)
 		{
 			free (bufer);
-			return (NULL);
+			return (-1);
 		}
-        bufer[byte_read] = '\0';
-		forfree = s;
-        s = ft_strjoin(s, bufer);
-		free(forfree);
-		free (bufer);
-    }
-    line = ft_line(&s);
-	if (byte_read == 0 && line[0] == '\0')
+		bufer[byte_read] = '\0';
+		to_free = *s;
+		*s = ft_strjoin(*s, bufer);
+		free(to_free);
+	}
+	free (bufer);
+	return (byte_read);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*s = NULL;	
+	char		*line;
+	int			byte_read;
+
+	line = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	if (!s)
+		s = ft_strdup("");
+	byte_read = ft_str(fd, &s);
+	line = ft_line(&s);
+	if (byte_read <= 0 && line[0] == '\0')
 	{
 		free (line);
 		return (NULL);
 	}
-    return(line);
+	return (line);
+}
+
+int	main(void)
+{
+	int		fd;
+	char	*i;
+
+	fd = open("test.txt", O_RDONLY);
+	i = get_next_line(fd);
+	printf("%s", i);
 }
