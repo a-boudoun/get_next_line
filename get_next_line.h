@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboudoun <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aboudoun <aboudoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:43:33 by aboudoun          #+#    #+#             */
-/*   Updated: 2021/11/24 14:46:40 by aboudoun         ###   ########.fr       */
+/*   Updated: 2021/12/06 14:16:55 by aboudoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 # include<stdlib.h>
 # include<unistd.h>
 
+char *get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(char *s);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-
 
 #endif
