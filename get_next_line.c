@@ -6,13 +6,10 @@
 /*   By: aboudoun <aboudoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 14:43:22 by aboudoun          #+#    #+#             */
-/*   Updated: 2021/12/07 17:14:32 by aboudoun         ###   ########.fr       */
+/*   Updated: 2021/12/21 15:28:36 by aboudoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include<stdio.h>
-// #include<fcntl.h>
-// #define BUFFER_SIZE 1
 #include "get_next_line.h"
 
 char	*ft_line(char **s)
@@ -86,19 +83,3 @@ char	*get_next_line(int fd)
 	}
 	return (line);
 }
-
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*i;
-// 	char 	*j;
-
-// 	fd = open("test.txt", O_RDONLY);
-// 	i = get_next_line(fd);
-// 	printf("%s", i);
-// 	while(i)
-// 	{
-// 		printf("%s", i);
-// 		i = get_next_line(fd);
-// 	}
-// }
